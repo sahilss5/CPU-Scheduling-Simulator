@@ -1271,6 +1271,9 @@ class UIController {
             if (overlay) overlay.classList.remove('active');
         };
 
+        // Guarantee closed state on initial load
+        closeSidebar();
+
         if (this.sidebarToggleBtn) {
             this.sidebarToggleBtn.addEventListener('click', () => {
                 const isOpen = this.sidebar.classList.toggle('open');
