@@ -2224,30 +2224,30 @@ kbd.key-badge:hover, .shortcut-card:hover kbd.key-badge {
    20. RESPONSIVE BREAKPOINTS & ACCESSIBILITY SYSTEM
    -------------------------------------------------------------------------- */
 
-/* Sidebar Overlay Backdrop (CLOSED = display: none, visibility: hidden, opacity: 0, pointer-events: none, backdrop-filter: none) */
+/* Sidebar Overlay Backdrop (CLOSED = display: none, visibility: hidden, opacity: 0, pointer-events: none) */
 .sidebar-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.45) !important;
+    background: rgba(0, 0, 0, 0.45);
     z-index: 999;
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
+    display: none;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     transition: opacity 0.25s ease, visibility 0.25s ease;
 }
 
 .sidebar-overlay.active {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
-    background: rgba(0, 0, 0, 0.45) !important;
+    display: block;
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    background: rgba(0, 0, 0, 0.45);
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
 }
@@ -2302,8 +2302,8 @@ kbd.key-badge:hover, .shortcut-card:hover kbd.key-badge {
     
     .app-sidebar.open {
         transform: translateX(0);
-        visibility: visible !important;
-        pointer-events: auto !important;
+        visibility: visible;
+        pointer-events: auto;
         box-shadow: 10px 0 30px rgba(0, 0, 0, 0.6);
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
