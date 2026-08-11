@@ -1258,6 +1258,11 @@ class UIController {
         if (viewId === 'analytics') {
             this.analytics.renderAnalytics(simResult, this.state);
         }
+
+        // Mobile drawer cleanup: Automatically close sidebar & overlay whenever view changes
+        if (window.innerWidth <= 992 && typeof this.closeMobileSidebar === 'function') {
+            this.closeMobileSidebar();
+        }
     }
 
 
