@@ -496,6 +496,24 @@ body {
     gap: 12px;
     padding: 22px 20px;
     border-bottom: 1px solid var(--border-color);
+    position: relative;
+}
+
+.sidebar-close-btn {
+    display: none;
+    margin-left: auto;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: color 0.2s ease, background 0.2s ease;
+}
+
+.sidebar-close-btn:hover {
+    color: var(--text-primary);
+    background: var(--bg-hover);
 }
 
 .brand-icon {

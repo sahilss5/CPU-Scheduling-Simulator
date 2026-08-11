@@ -1262,25 +1262,31 @@ class UIController {
 
 
     bindEvents() {
-        // Sidebar Toggle & Mobile Overlay
+        // Sidebar Toggle, Close Button & Mobile Overlay
         const overlay = document.getElementById('sidebar-overlay');
+        const closeBtn = document.getElementById('sidebar-close-btn');
+
+        const closeSidebar = () => {
+            if (this.sidebar) this.sidebar.classList.remove('open');
+            if (overlay) overlay.classList.remove('active');
+        };
+
         if (this.sidebarToggleBtn) {
             this.sidebarToggleBtn.addEventListener('click', () => {
                 const isOpen = this.sidebar.classList.toggle('open');
                 if (overlay) overlay.classList.toggle('active', isOpen);
             });
         }
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeSidebar);
+        }
         if (overlay) {
-            overlay.addEventListener('click', () => {
-                this.sidebar.classList.remove('open');
-                overlay.classList.remove('active');
-            });
+            overlay.addEventListener('click', closeSidebar);
         }
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', () => {
                 if (window.innerWidth <= 992) {
-                    this.sidebar.classList.remove('open');
-                    if (overlay) overlay.classList.remove('active');
+                    closeSidebar();
                 }
             });
         });
