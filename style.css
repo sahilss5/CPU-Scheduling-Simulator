@@ -2224,36 +2224,43 @@ kbd.key-badge:hover, .shortcut-card:hover kbd.key-badge {
    20. RESPONSIVE BREAKPOINTS & ACCESSIBILITY SYSTEM
    -------------------------------------------------------------------------- */
 
-/* Sidebar Overlay Backdrop (Closed by default, no backdrop blur to avoid mobile GPU layer bugs) */
+/* Sidebar Overlay Backdrop (CLOSED = display: none, visibility: hidden, opacity: 0, pointer-events: none, backdrop-filter: none) */
 .sidebar-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(7, 10, 20, 0.65);
+    background: rgba(0, 0, 0, 0.45) !important;
     z-index: 999;
-    display: none;
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     transition: opacity 0.25s ease, visibility 0.25s ease;
 }
 
 .sidebar-overlay.active {
-    display: block;
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    background: rgba(0, 0, 0, 0.45) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
 }
 
 @media (min-width: 993px) {
     .sidebar-overlay,
     .sidebar-overlay.active {
         display: none !important;
-        opacity: 0 !important;
         visibility: hidden !important;
+        opacity: 0 !important;
         pointer-events: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
     }
 }
 
@@ -2279,15 +2286,27 @@ kbd.key-badge:hover, .shortcut-card:hover kbd.key-badge {
         position: fixed;
         top: 0;
         left: 0;
+        width: 260px;
+        max-width: 80vw;
         height: 100vh;
         z-index: 1000;
         transform: translateX(-100%);
-        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        visibility: hidden;
+        pointer-events: none;
+        box-shadow: none;
+        background: #0B1120 !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s ease;
     }
     
     .app-sidebar.open {
         transform: translateX(0);
+        visibility: visible !important;
+        pointer-events: auto !important;
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.6);
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
     }
 
     .app-main {
@@ -2314,6 +2333,16 @@ kbd.key-badge:hover, .shortcut-card:hover kbd.key-badge {
 
 /* Mobile Devices (<= 768px) */
 @media (max-width: 768px) {
+    .top-header,
+    .glass-card,
+    .dash-card,
+    .chart-card,
+    .player-controls-bar,
+    .table-responsive {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+
     .hero-title {
         font-size: 1.5rem;
         line-height: 1.3;

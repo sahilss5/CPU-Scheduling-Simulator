@@ -1267,8 +1267,36 @@ class UIController {
         const closeBtn = document.getElementById('sidebar-close-btn');
 
         const closeSidebar = () => {
-            if (this.sidebar) this.sidebar.classList.remove('open');
-            if (overlay) overlay.classList.remove('active');
+            if (this.sidebar) {
+                this.sidebar.classList.remove('open');
+                if (window.innerWidth <= 992) {
+                    this.sidebar.style.visibility = 'hidden';
+                    this.sidebar.style.pointerEvents = 'none';
+                }
+            }
+            if (overlay) {
+                overlay.classList.remove('active');
+                overlay.style.display = 'none';
+                overlay.style.visibility = 'hidden';
+                overlay.style.opacity = '0';
+                overlay.style.pointerEvents = 'none';
+            }
+            document.body.style.overflow = '';
+        };
+
+        const openSidebar = () => {
+            if (this.sidebar) {
+                this.sidebar.classList.add('open');
+                this.sidebar.style.visibility = 'visible';
+                this.sidebar.style.pointerEvents = 'auto';
+            }
+            if (overlay) {
+                overlay.classList.add('active');
+                overlay.style.display = 'block';
+                overlay.style.visibility = 'visible';
+                overlay.style.opacity = '1';
+                overlay.style.pointerEvents = 'auto';
+            }
         };
 
         // Guarantee closed state on initial load
@@ -1276,8 +1304,12 @@ class UIController {
 
         if (this.sidebarToggleBtn) {
             this.sidebarToggleBtn.addEventListener('click', () => {
-                const isOpen = this.sidebar.classList.toggle('open');
-                if (overlay) overlay.classList.toggle('active', isOpen);
+                const isOpen = this.sidebar && this.sidebar.classList.contains('open');
+                if (isOpen) {
+                    closeSidebar();
+                } else {
+                    openSidebar();
+                }
             });
         }
         if (closeBtn) {
