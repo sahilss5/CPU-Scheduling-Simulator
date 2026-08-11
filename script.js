@@ -1262,66 +1262,80 @@ class UIController {
 
 
     bindEvents() {
-        // Sidebar Toggle, Close Button & Mobile Overlay
-        const overlay = document.getElementById('sidebar-overlay');
-        const closeBtn = document.getElementById('sidebar-close-btn');
+        // Clean Mobile Navigation Drawer Controller
+        this.openMobileSidebar = () => {
+            if (this.sidebar) {
+                this.sidebar.classList.add('open');
+            }
+            const overlay = document.getElementById('sidebar-overlay');
+            if (overlay) {
+                overlay.classList.add('active');
+            }
+        };
 
-        const closeSidebar = () => {
+        this.closeMobileSidebar = () => {
             if (this.sidebar) {
                 this.sidebar.classList.remove('open');
-                if (window.innerWidth <= 992) {
-                    this.sidebar.style.visibility = 'hidden';
-                    this.sidebar.style.pointerEvents = 'none';
-                }
             }
+            const overlay = document.getElementById('sidebar-overlay');
             if (overlay) {
                 overlay.classList.remove('active');
-                overlay.style.display = 'none';
-                overlay.style.visibility = 'hidden';
-                overlay.style.opacity = '0';
-                overlay.style.pointerEvents = 'none';
             }
             document.body.style.overflow = '';
         };
 
-        const openSidebar = () => {
-            if (this.sidebar) {
-                this.sidebar.classList.add('open');
-                this.sidebar.style.visibility = 'visible';
-                this.sidebar.style.pointerEvents = 'auto';
-            }
-            if (overlay) {
-                overlay.classList.add('active');
-                overlay.style.display = 'block';
-                overlay.style.visibility = 'visible';
-                overlay.style.opacity = '1';
-                overlay.style.pointerEvents = 'auto';
+        this.toggleMobileSidebar = () => {
+            if (this.sidebar && this.sidebar.classList.contains('open')) {
+                this.closeMobileSidebar();
+            } else {
+                this.openMobileSidebar();
             }
         };
 
-        // Guarantee closed state on initial load
-        closeSidebar();
+        // Ensure sidebar starts CLOSED on initial load
+        this.closeMobileSidebar();
 
+        // Hamburger Toggle
         if (this.sidebarToggleBtn) {
-            this.sidebarToggleBtn.addEventListener('click', () => {
-                const isOpen = this.sidebar && this.sidebar.classList.contains('open');
-                if (isOpen) {
-                    closeSidebar();
-                } else {
-                    openSidebar();
-                }
+            this.sidebarToggleBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.toggleMobileSidebar();
             });
         }
+
+        // Drawer Close Button
+        const closeBtn = document.getElementById('sidebar-close-btn');
         if (closeBtn) {
-            closeBtn.addEventListener('click', closeSidebar);
+            closeBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.closeMobileSidebar();
+            });
         }
+
+        // Overlay Click Backdrop
+        const overlay = document.getElementById('sidebar-overlay');
         if (overlay) {
-            overlay.addEventListener('click', closeSidebar);
+            overlay.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.closeMobileSidebar();
+            });
         }
+
+        // Escape Key Listener to Close Drawer
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && window.innerWidth <= 992) {
+                this.closeMobileSidebar();
+            }
+        });
+
+        // Navigation Items Auto-Close on Mobile
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', () => {
                 if (window.innerWidth <= 992) {
-                    closeSidebar();
+                    this.closeMobileSidebar();
                 }
             });
         });

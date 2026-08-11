@@ -2224,21 +2224,28 @@ kbd.key-badge:hover, .shortcut-card:hover kbd.key-badge {
    20. RESPONSIVE BREAKPOINTS & ACCESSIBILITY SYSTEM
    -------------------------------------------------------------------------- */
 
-/* Sidebar Overlay Backdrop (CLOSED = display: none, visibility: hidden, opacity: 0, pointer-events: none) */
+/* --------------------------------------------------------------------------
+   20. RESPONSIVE BREAKPOINTS & ACCESSIBILITY SYSTEM
+   -------------------------------------------------------------------------- */
+
+/* Mobile Overlay Backdrop (CLOSED = display: none, visibility: hidden, opacity: 0, pointer-events: none) */
 .sidebar-overlay {
     position: fixed;
     top: 0;
     left: 0;
+    right: 0;
+    bottom: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.45);
-    z-index: 999;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
     display: none;
     visibility: hidden;
     opacity: 0;
     pointer-events: none;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
+    filter: none !important;
     transition: opacity 0.25s ease, visibility 0.25s ease;
 }
 
@@ -2247,9 +2254,10 @@ kbd.key-badge:hover, .shortcut-card:hover kbd.key-badge {
     visibility: visible;
     opacity: 1;
     pointer-events: auto;
-    background: rgba(0, 0, 0, 0.45);
+    background: rgba(0, 0, 0, 0.5);
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
+    filter: none !important;
 }
 
 @media (min-width: 993px) {
@@ -2261,6 +2269,7 @@ kbd.key-badge:hover, .shortcut-card:hover kbd.key-badge {
         pointer-events: none !important;
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
+        filter: none !important;
     }
 }
 
@@ -2282,14 +2291,28 @@ kbd.key-badge:hover, .shortcut-card:hover kbd.key-badge {
 
 /* Medium Screens & Tablet Navigation (<= 992px) */
 @media (max-width: 992px) {
+    /* Disable GPU backdrop filters on mobile for sharp, high-performance rendering */
+    .top-header,
+    .app-sidebar,
+    .glass-card,
+    .dash-card,
+    .chart-card,
+    .player-controls-bar,
+    .table-responsive {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        filter: none !important;
+    }
+
     .app-sidebar {
         position: fixed;
         top: 0;
         left: 0;
-        width: 260px;
+        bottom: 0;
+        width: 280px;
         max-width: 80vw;
         height: 100vh;
-        z-index: 1000;
+        z-index: 1001;
         transform: translateX(-100%);
         visibility: hidden;
         pointer-events: none;
@@ -2297,16 +2320,41 @@ kbd.key-badge:hover, .shortcut-card:hover kbd.key-badge {
         background: #0B1120 !important;
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s ease;
+        filter: none !important;
+        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.25s ease;
     }
     
     .app-sidebar.open {
         transform: translateX(0);
         visibility: visible;
         pointer-events: auto;
-        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.6);
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.7);
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
+        filter: none !important;
+    }
+
+    .sidebar-close-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 44px;
+        min-height: 44px;
+        width: 44px;
+        height: 44px;
+        margin-left: auto;
+        background: transparent;
+        border: none;
+        color: var(--text-muted);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: color 0.2s ease, background 0.2s ease;
+    }
+
+    .sidebar-close-btn:hover,
+    .sidebar-close-btn:active {
+        color: var(--text-primary);
+        background: var(--bg-hover);
     }
 
     .app-main {
