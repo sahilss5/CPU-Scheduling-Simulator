@@ -1262,12 +1262,28 @@ class UIController {
 
 
     bindEvents() {
-        // Sidebar Toggle
+        // Sidebar Toggle & Mobile Overlay
+        const overlay = document.getElementById('sidebar-overlay');
         if (this.sidebarToggleBtn) {
             this.sidebarToggleBtn.addEventListener('click', () => {
-                this.sidebar.classList.toggle('open');
+                const isOpen = this.sidebar.classList.toggle('open');
+                if (overlay) overlay.classList.toggle('active', isOpen);
             });
         }
+        if (overlay) {
+            overlay.addEventListener('click', () => {
+                this.sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+            });
+        }
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                if (window.innerWidth <= 992) {
+                    this.sidebar.classList.remove('open');
+                    if (overlay) overlay.classList.remove('active');
+                }
+            });
+        });
 
         // Theme Toggle Button & Dropdown Accent Switcher
         if (this.themeToggleBtn) {

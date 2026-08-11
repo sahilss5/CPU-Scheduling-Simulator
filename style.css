@@ -2203,24 +2203,304 @@ kbd.key-badge:hover, .shortcut-card:hover kbd.key-badge {
 }
 
 /* --------------------------------------------------------------------------
-   20. RESPONSIVE BREAKPOINTS & ACCESSIBILITY
+   20. RESPONSIVE BREAKPOINTS & ACCESSIBILITY SYSTEM
    -------------------------------------------------------------------------- */
+
+/* Sidebar Overlay Backdrop */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Tablet & Laptop (<= 1024px) */
+@media (max-width: 1024px) {
+    .dash-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .dashboard-split-grid {
+        grid-template-columns: 1fr;
+    }
+    .analytics-charts-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .comparison-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Medium Screens & Tablet Navigation (<= 992px) */
 @media (max-width: 992px) {
-    .app-sidebar { transform: translateX(-100%); }
-    .app-sidebar.open { transform: translateX(0); }
-    .app-main { margin-left: 0; width: 100%; max-width: 100%; padding: 16px 16px 40px; }
-    .sidebar-toggle-btn { display: flex; }
-    .hero-title { font-size: 1.8rem; }
+    .app-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 1000;
+        transform: translateX(-100%);
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .app-sidebar.open {
+        transform: translateX(0);
+    }
+
+    .app-main {
+        margin-left: 0;
+        width: 100%;
+        max-width: 100%;
+        padding: 16px 14px 40px;
+        box-sizing: border-box;
+    }
+
+    .sidebar-toggle-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .app-header {
+        padding: 12px 14px;
+        gap: 10px;
+    }
 }
 
-@media (max-width: 576px) {
-    .algorithm-grid { grid-template-columns: 1fr; }
-    .form-grid { grid-template-columns: 1fr; }
-    .stats-grid { grid-template-columns: 1fr; }
-    .hero-actions { flex-direction: column; width: 100%; }
-    .hero-actions .btn { width: 100%; }
+/* Mobile Devices (<= 768px) */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 1.5rem;
+        line-height: 1.3;
+    }
+
+    .hero-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .view-title {
+        font-size: 1.35rem;
+    }
+
+    .view-desc {
+        font-size: 0.85rem;
+    }
+
+    /* Dashboard Single Column */
+    .dash-cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .hero-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Algorithm Selection Grid */
+    .algorithm-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Process Manager Form & Actions */
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .form-actions-right {
+        width: 100%;
+        margin-top: 6px;
+    }
+
+    .random-generator-dropdown {
+        width: 100%;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .random-generator-dropdown select,
+    .random-generator-dropdown button {
+        width: 100% !important;
+    }
+
+    /* Process Table Container */
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 10px;
+    }
+
+    .data-table {
+        min-width: 620px;
+    }
+
+    /* Simulation Engine */
+    .dual-cpu-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .flow-pipeline-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 8px;
+    }
+
+    .player-controls-bar {
+        padding: 12px 10px;
+    }
+
+    .player-buttons {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        width: 100%;
+    }
+
+    .player-buttons .btn {
+        width: 100%;
+        justify-content: center;
+        min-height: 44px;
+    }
+
+    .speed-selector {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    /* Gantt Chart Toolbar & Container */
+    .gantt-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .gantt-actions {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        width: 100%;
+    }
+
+    .gantt-actions .btn {
+        width: 100%;
+        justify-content: center;
+        padding: 8px 6px;
+        font-size: 0.8rem;
+    }
+
+    .gantt-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #gantt-bar-container {
+        min-width: 500px;
+    }
+
+    /* Analytics & Comparison Cards */
+    .analytics-charts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .comparison-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .comparison-table {
+        min-width: 850px;
+    }
+
+    .chart-card {
+        height: auto;
+        min-height: 300px;
+        padding: 14px;
+    }
+
+    .chart-container {
+        height: 220px;
+    }
+
+    /* Touch Friendly Target Sizes */
+    .btn, input, select {
+        min-height: 42px;
+    }
 }
 
+/* Small Mobile Devices (<= 480px) */
+@media (max-width: 480px) {
+    .app-main {
+        padding: 10px 10px 30px;
+    }
+
+    .hero-card {
+        padding: 16px 12px;
+    }
+
+    .hero-title {
+        font-size: 1.3rem;
+    }
+
+    .view-title {
+        font-size: 1.2rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .stat-card {
+        padding: 10px;
+    }
+
+    .stat-value {
+        font-size: 1.1rem;
+    }
+
+    .gantt-actions {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .player-buttons {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Reduced Motion Accessibility */
 @media (prefers-reduced-motion: reduce) {
     *, ::before, ::after {
         animation-duration: 0.01ms !important;
