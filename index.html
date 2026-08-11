@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A professional enterprise desktop-grade CPU Scheduling Workstation for Operating Systems. Visualize, simulate, and benchmark FCFS, SJF, SRTF, Priority NP, Priority Preemptive, and Round Robin algorithms in real-time with interactive Gantt charts, live player controls, system monitor, and performance analytics.">
+    <title>CPU Scheduling Workstation | OS Engine V2.0</title>
+
+    <!-- Google Fonts: Plus Jakarta Sans, Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Chart.js CDN for Performance Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- External Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- FULL-PAGE OPENING STARTUP SPLASH SCREEN -->
+    <div id="splash-screen" class="splash-screen">
+        <div class="splash-grid-bg"></div>
+        <div class="splash-content">
+            <div class="splash-logo-wrapper">
+                <div class="splash-logo-icon">
+                    <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="4" y="4" width="16" height="16" rx="3" ry="3"></rect>
+                        <rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor" fill-opacity="0.3"></rect>
+                        <line x1="8" y1="1" x2="8" y2="4"></line>
+                        <line x1="12" y1="1" x2="12" y2="4"></line>
+                        <line x1="16" y1="1" x2="16" y2="4"></line>
+                        <line x1="8" y1="20" x2="8" y2="23"></line>
+                        <line x1="12" y1="20" x2="12" y2="23"></line>
+                        <line x1="16" y1="20" x2="16" y2="23"></line>
+                        <line x1="1" y1="8" x2="4" y2="8"></line>
+                        <line x1="1" y1="12" x2="4" y2="12"></line>
+                        <line x1="1" y1="16" x2="4" y2="16"></line>
+                        <line x1="20" y1="8" x2="23" y2="8"></line>
+                        <line x1="20" y1="12" x2="23" y2="12"></line>
+                        <line x1="20" y1="16" x2="23" y2="16"></line>
+                    </svg>
+                </div>
+                <div class="splash-spinner-ring"></div>
+            </div>
+
+            <div class="splash-titles">
+                <h1 class="splash-brand-title">CPU SCHEDULER</h1>
+                <div class="splash-tag-badge">OS ENGINE V2.0</div>
+            </div>
+
+            <!-- Terminal-style boot message console -->
+            <div id="splash-terminal-log" class="splash-terminal-log">
+                <!-- Dynamically populated via script.js -->
+            </div>
+
+            <div class="splash-progress-wrapper">
+                <div class="splash-progress-header">
+                    <span id="splash-status-text" class="splash-status-text">Preparing Operating System Workstation<span class="dot-anim">...</span></span>
+                    <span id="splash-percent-text" class="splash-percent-text">0%</span>
+                </div>
+                <div class="splash-progress-container">
+                    <div class="splash-progress-bar" id="splash-progress-bar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Canvas background for interactive floating particles -->
+    <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+    <!-- Main Layout Container -->
+    <div class="app-layout">
+
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="app-sidebar" id="app-sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-icon" title="Classic CPU Processor Core">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="4" y="4" width="16" height="16" rx="3" ry="3"></rect>
+                        <rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor" fill-opacity="0.25"></rect>
+                        <line x1="8" y1="1" x2="8" y2="4"></line>
+                        <line x1="12" y1="1" x2="12" y2="4"></line>
+                        <line x1="16" y1="1" x2="16" y2="4"></line>
+                        <line x1="8" y1="20" x2="8" y2="23"></line>
+                        <line x1="12" y1="20" x2="12" y2="23"></line>
+                        <line x1="16" y1="20" x2="16" y2="23"></line>
+                        <line x1="1" y1="8" x2="4" y2="8"></line>
+                        <line x1="1" y1="12" x2="4" y2="12"></line>
+                        <line x1="1" y1="16" x2="4" y2="16"></line>
+                        <line x1="20" y1="8" x2="23" y2="8"></line>
+                        <line x1="20" y1="12" x2="23" y2="12"></line>
+                        <line x1="20" y1="16" x2="23" y2="16"></line>
+                    </svg>
+                </div>
+                <div class="brand-titles">
+                    <span class="brand-name">CPU SCHEDULER</span>
+                    <span class="brand-tag">OS ENGINE V2.0</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="#dashboard" class="nav-item active" data-view-target="dashboard">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="#algorithm" class="nav-item" data-view-target="algorithm">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="16 18 22 12 16 6"></polyline>
+                        <polyline points="8 6 2 12 8 18"></polyline>
+                    </svg>
+                    <span>Algorithms</span>
+                </a>
+
+                <a href="#process-manager" class="nav-item" data-view-target="process-manager">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                    </svg>
+                    <span>Process Manager</span>
+                </a>
+
+                <a href="#simulation" class="nav-item" data-view-target="simulation">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                    <span>Simulation</span>
+                </a>
+
+                <a href="#results" class="nav-item" data-view-target="results">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    <span>Results</span>
+                </a>
+
+                <a href="#gantt" class="nav-item" data-view-target="gantt">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                        <line x1="7" y1="8" x2="15" y2="8"></line>
+                        <line x1="9" y1="12" x2="17" y2="12"></line>
+                        <line x1="7" y1="16" x2="13" y2="16"></line>
+                    </svg>
+                    <span>Gantt Chart</span>
+                </a>
+
+                <a href="#analytics" class="nav-item" data-view-target="analytics">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                        <polyline points="2 12 6 8 10 12 14 4 18 10 22 6"></polyline>
+                    </svg>
+                    <span>Performance Analytics</span>
+                </a>
+
+                <a href="#comparison" class="nav-item" data-view-target="comparison">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 20V10"></path>
+                        <path d="M12 20V4"></path>
+                        <path d="M6 20v-6"></path>
+                        <path d="M2 20h20"></path>
+                    </svg>
+                    <span>Comparison</span>
+                </a>
+
+                <a href="#about" class="nav-item" data-view-target="about">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                    <span>About & Viva</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="system-status">
+                    <span class="status-indicator"></span>
+                    <span class="status-text">Engine Online</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT VIEW CONTAINER -->
+        <div class="app-main">
+
+            <!-- TOP HEADER BAR -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button id="sidebar-toggle" class="btn-icon sidebar-toggle-btn" aria-label="Toggle Sidebar Navigation">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+
+                    <!-- Breadcrumb -->
+                    <div class="view-breadcrumb">
+                        <span class="breadcrumb-icon">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                                <rect x="9" y="9" width="6" height="6"></rect>
+                                <line x1="9" y1="1" x2="9" y2="4"></line>
+                                <line x1="15" y1="1" x2="15" y2="4"></line>
+                            </svg>
+                        </span>
+                        <span id="breadcrumb-category">Workstation</span>
+                        <span class="breadcrumb-separator">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </span>
+                        <span id="breadcrumb-current" class="breadcrumb-current-pill">Dashboard</span>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <div class="header-engine-pill">
+                        <span class="pulse-dot"></span>
+                        <span>Sim Core 100%</span>
+                    </div>
+
+                    <button id="theme-toggle" class="btn-theme" aria-label="Toggle Light and Dark Theme">
+                        <span class="theme-icon sun-icon" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="5"></circle>
+                                <line x1="12" y1="1" x2="12" y2="3"></line>
+                                <line x1="12" y1="21" x2="12" y2="23"></line>
+                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                <line x1="1" y1="12" x2="3" y2="12"></line>
+                                <line x1="21" y1="12" x2="23" y2="12"></line>
+                                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                            </svg>
+                        </span>
+                        <span class="theme-icon moon-icon" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                            </svg>
+                        </span>
+                        <span id="theme-label" class="theme-text">Dark Mode</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- VIEW 1: DASHBOARD (EXACT MATCH TO USER SCREENSHOT) -->
+            <section id="view-dashboard" class="app-view active">
+                <!-- HERO CARD -->
+                <div class="view-hero glass-card">
+                    <div class="hero-badge">OPERATING SYSTEMS ENGINEERING WORKSTATION</div>
+                    <h1 class="hero-title">CPU Scheduling Simulator</h1>
+                    <p class="hero-subtitle">Simulate, visualize, and benchmark process scheduling policies (FCFS, SJF, Priority, Round Robin) with real-time Gantt execution charts and performance analytics.</p>
+                    
+                    <div class="hero-actions">
+                        <a href="#algorithm" class="btn btn-primary btn-lg">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="16 18 22 12 16 6"></polyline>
+                                <polyline points="8 6 2 12 8 18"></polyline>
+                            </svg>
+                            Select Policy
+                        </a>
+                        <a href="#process-manager" class="btn btn-secondary btn-lg">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            Configure Queue
+                        </a>
+                        <a href="#simulation" class="btn btn-accent-dark btn-lg">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
+                            Execute Engine
+                        </a>
+                    </div>
+                </div>
+
+                <!-- TOP SUMMARY CARDS ROW (3 CARDS MATCHING SCREENSHOT) -->
+                <div class="dashboard-grid">
+                    <div class="dash-card glass-card">
+                        <div class="dash-card-icon icon-blue">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                        <div class="dash-card-info">
+                            <span class="dash-card-label">ACTIVE POLICY</span>
+                            <h3 id="dash-active-algo" class="dash-card-value">First-Come, First-Served (FCFS)</h3>
+                            <span id="dash-active-type" class="badge-tag">Non-Preemptive</span>
+                        </div>
+                    </div>
+
+                    <div class="dash-card glass-card">
+                        <div class="dash-card-icon icon-emerald">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                            </svg>
+                        </div>
+                        <div class="dash-card-info">
+                            <span class="dash-card-label">QUEUED WORKLOAD</span>
+                            <h3 id="dash-total-procs" class="dash-card-value">0 Processes</h3>
+                            <span class="dash-card-subtext">Configured in Process Manager</span>
+                        </div>
+                    </div>
+
+                    <div class="dash-card glass-card">
+                        <div class="dash-card-icon icon-indigo">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </div>
+                        <div class="dash-card-info">
+                            <span class="dash-card-label">LAST SIMULATION RUN</span>
+                            <h3 id="dash-last-run" class="dash-card-value">Not Run Yet</h3>
+                            <span id="dash-last-run-sub" class="dash-card-subtext">Click Simulation to execute</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DASHBOARD BOTTOM SPLIT GRID (MATCHING SCREENSHOT) -->
+                <div class="dashboard-split-grid mt-4">
+                    <!-- Left: Active Workload Queue Preview -->
+                    <div class="dash-section-card glass-card">
+                        <div class="dash-section-header">
+                            <div>
+                                <h3 class="dash-section-title">Active Workload Queue</h3>
+                                <p class="dash-section-desc">Current processes loaded in memory ready for dispatching.</p>
+                            </div>
+                            <a href="#process-manager" class="btn btn-outline btn-sm">Manage Queue</a>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>PROCESS ID</th>
+                                        <th>ARRIVAL (AT)</th>
+                                        <th>BURST (BT)</th>
+                                        <th>PRIORITY</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dash-queue-table-body">
+                                    <!-- Dynamic mini preview -->
+                                </tbody>
+                            </table>
+                            <div id="dash-queue-empty" class="empty-state">
+                                <p>No processes queued. Add processes or load sample preset.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Supported Policies Preview -->
+                    <div class="dash-section-card glass-card">
+                        <div class="dash-section-header">
+                            <div>
+                                <h3 class="dash-section-title">Supported CPU Scheduling Policies</h3>
+                                <p class="dash-section-desc">Core algorithms available in this workstation suite.</p>
+                            </div>
+                            <a href="#algorithm" class="btn btn-outline btn-sm">Select Policy</a>
+                        </div>
+
+                        <div class="policy-list">
+                            <div class="policy-item">
+                                <div class="policy-badge">FCFS</div>
+                                <div class="policy-info">
+                                    <h4>First-Come, First-Served</h4>
+                                    <p>Non-preemptive queue dispatch. Simple, fair, subject to Convoy Effect.</p>
+                                </div>
+                            </div>
+
+                            <div class="policy-item">
+                                <div class="policy-badge">SJF</div>
+                                <div class="policy-info">
+                                    <h4>Shortest Job First</h4>
+                                    <p>Non-preemptive, selects arrived process with shortest burst time. Provably optimal for min average waiting time.</p>
+                                </div>
+                            </div>
+
+                            <div class="policy-item">
+                                <div class="policy-badge">PRIORITY</div>
+                                <div class="policy-info">
+                                    <h4>Priority Scheduling</h4>
+                                    <p>Non-preemptive ranking where lower numerical value indicates higher priority.</p>
+                                </div>
+                            </div>
+
+                            <div class="policy-item">
+                                <div class="policy-badge">RR</div>
+                                <div class="policy-info">
+                                    <h4>Round Robin</h4>
+                                    <p>Preemptive time slicing with fixed quantum length to guarantee rapid interactive response.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 2: ALGORITHM SELECTION -->
+            <section id="view-algorithm" class="app-view">
+                <div class="view-header">
+                    <h2 class="view-title">Algorithm Selection</h2>
+                    <p class="view-desc">Select an operating system CPU scheduling policy to configure and evaluate.</p>
+                </div>
+
+                <div class="algorithm-grid" role="radiogroup" aria-label="Select CPU Scheduling Policy">
+                    <!-- FCFS Card -->
+                    <button class="algo-card active" data-algorithm="fcfs" role="radio" aria-checked="true">
+                        <div class="algo-card-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </div>
+                        <div class="algo-card-info">
+                            <span class="algo-name">First-Come, First-Served</span>
+                            <span class="algo-badge tag-non-preemptive">Non-Preemptive</span>
+                        </div>
+                        <div class="card-indicator"></div>
+                    </button>
+
+                    <!-- SJF Card -->
+                    <button class="algo-card" data-algorithm="sjf" role="radio" aria-checked="false">
+                        <div class="algo-card-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                            </svg>
+                        </div>
+                        <div class="algo-card-info">
+                            <span class="algo-name">Shortest Job First</span>
+                            <span class="algo-badge tag-non-preemptive">Non-Preemptive</span>
+                        </div>
+                        <div class="card-indicator"></div>
+                    </button>
+
+                    <!-- SRTF Card -->
+                    <button class="algo-card" data-algorithm="srtf" role="radio" aria-checked="false">
+                        <div class="algo-card-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="13 17 18 12 13 7"></polyline>
+                                <polyline points="6 17 11 12 6 7"></polyline>
+                            </svg>
+                        </div>
+                        <div class="algo-card-info">
+                            <span class="algo-name">Shortest Remaining Time First</span>
+                            <span class="algo-badge tag-preemptive">Preemptive SJF</span>
+                        </div>
+                        <div class="card-indicator"></div>
+                    </button>
+
+                    <!-- Priority Non-Preemptive Card -->
+                    <button class="algo-card" data-algorithm="priority" role="radio" aria-checked="false">
+                        <div class="algo-card-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                            </svg>
+                        </div>
+                        <div class="algo-card-info">
+                            <span class="algo-name">Priority (Non-Preemptive)</span>
+                            <span class="algo-badge tag-non-preemptive">Non-Preemptive</span>
+                        </div>
+                        <div class="card-indicator"></div>
+                    </button>
+
+                    <!-- Priority Preemptive Card -->
+                    <button class="algo-card" data-algorithm="priority_p" role="radio" aria-checked="false">
+                        <div class="algo-card-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                            </svg>
+                        </div>
+                        <div class="algo-card-info">
+                            <span class="algo-name">Priority (Preemptive)</span>
+                            <span class="algo-badge tag-preemptive">Preemptive</span>
+                        </div>
+                        <div class="card-indicator"></div>
+                    </button>
+
+                    <!-- Round Robin Card -->
+                    <button class="algo-card" data-algorithm="rr" role="radio" aria-checked="false">
+                        <div class="algo-card-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 4 23 10 17 10"></polyline>
+                                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                            </svg>
+                        </div>
+                        <div class="algo-card-info">
+                            <span class="algo-name">Round Robin</span>
+                            <span class="algo-badge tag-preemptive">Preemptive Slice</span>
+                        </div>
+                        <div class="card-indicator"></div>
+                    </button>
+                </div>
+
+                <!-- Time Quantum Box (Conditional for Round Robin) -->
+                <div id="time-quantum-container" class="time-quantum-box glass-card hidden">
+                    <div class="tq-content">
+                        <label for="time-quantum" class="tq-label">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            Time Quantum (TQ):
+                        </label>
+                        <div class="input-with-controls">
+                            <input type="number" id="time-quantum" min="1" max="100" value="2" class="form-input tq-input">
+                            <span class="input-unit">time units</span>
+                        </div>
+                    </div>
+                    <p class="tq-hint">Determines the maximum continuous CPU time slice allocated to each process before preemption.</p>
+                </div>
+
+                <!-- Algorithm Info Panel -->
+                <div class="info-panel glass-card" id="algo-info-panel">
+                    <div class="info-header">
+                        <h3 id="algo-info-title" class="info-title">First-Come, First-Served (FCFS)</h3>
+                        <span id="algo-info-badge" class="badge-tag">Non-Preemptive</span>
+                    </div>
+                    <p id="algo-info-desc" class="info-description">
+                        Processes are dispatched strictly according to their arrival time in the ready queue. The process that arrives first gets executed first until completion.
+                    </p>
+                    <div class="info-details-grid">
+                        <div class="info-col">
+                            <h4>Advantages</h4>
+                            <ul id="algo-info-advantages" class="info-list pros-list">
+                                <li>Simple and easy to understand/implement</li>
+                                <li>No starvation (every process eventually executes)</li>
+                            </ul>
+                        </div>
+                        <div class="info-col">
+                            <h4>Disadvantages</h4>
+                            <ul id="algo-info-disadvantages" class="info-list cons-list">
+                                <li>High Average Waiting Time (Convoy Effect)</li>
+                                <li>Poor performance for interactive time-sharing systems</li>
+                            </ul>
+                        </div>
+                        <div class="info-col">
+                            <h4>Time Complexity</h4>
+                            <p id="algo-info-complexity" class="complexity-text">O(N log N) — due to sorting by arrival time</p>
+                            
+                            <h4>Suitable Use Cases</h4>
+                            <p id="algo-info-usecases" class="usecase-text">Batch processing systems where response time is not critical</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 3: PROCESS MANAGER -->
+            <section id="view-process-manager" class="app-view">
+                <div class="view-header">
+                    <h2 class="view-title">Process Workload Manager</h2>
+                    <p class="view-desc">Add, edit, search, and filter processes in the active ready queue workload dataset.</p>
+                </div>
+
+                <!-- Search and Filter Bar -->
+                <div class="filter-bar glass-card mb-4">
+                    <div class="filter-grid">
+                        <div class="filter-group">
+                            <label for="filter-search-pid" class="filter-label">Search Process ID</label>
+                            <input type="text" id="filter-search-pid" class="form-input" placeholder="e.g. P1">
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="filter-state" class="filter-label">Filter State</label>
+                            <select id="filter-state" class="form-input">
+                                <option value="ALL" selected>All States</option>
+                                <option value="READY">Ready</option>
+                                <option value="RUNNING">Running</option>
+                                <option value="COMPLETED">Completed</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="filter-priority" class="filter-label">Filter Priority</label>
+                            <input type="number" id="filter-priority" class="form-input" min="1" placeholder="All Priorities">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Validation Alert -->
+                <div id="validation-alert" class="alert-box alert-danger hidden" role="alert">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    <span id="validation-message">Please check input fields for errors.</span>
+                </div>
+
+                <!-- Process Input Form -->
+                <form id="process-form" class="process-form glass-card" novalidate>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="process-id" class="form-label">Process ID</label>
+                            <input type="text" id="process-id" class="form-input input-readonly" value="P1" readonly aria-readonly="true">
+                            <span class="field-hint">Auto-generated</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="arrival-time" class="form-label">Arrival Time (AT)</label>
+                            <input type="number" id="arrival-time" class="form-input" min="0" value="0" placeholder="e.g. 0" required>
+                            <span class="field-hint">Min: 0 time units</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="burst-time" class="form-label">Burst Time (BT)</label>
+                            <input type="number" id="burst-time" class="form-input" min="1" value="5" placeholder="e.g. 5" required>
+                            <span class="field-hint">Min: 1 time unit</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="priority" class="form-label">Priority</label>
+                            <input type="number" id="priority" class="form-input" min="1" value="1" placeholder="e.g. 1" required>
+                            <span class="field-hint">Lower # = Higher Priority</span>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" id="btn-add-process" class="btn btn-primary">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            Add Process
+                        </button>
+                        
+                        <button type="button" id="btn-update-process" class="btn btn-success hidden">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Save Changes
+                        </button>
+
+                        <button type="button" id="btn-cancel-edit" class="btn btn-secondary hidden">
+                            Cancel Edit
+                        </button>
+
+                        <div class="form-actions-right">
+                            <div class="random-generator-dropdown" style="display: inline-flex; gap: 6px; align-items: center;">
+                                <select id="select-random-count" class="form-input" style="width: auto; padding: 10px 14px; font-size: 0.88rem;">
+                                    <option value="5">5 Random</option>
+                                    <option value="10" selected>10 Random</option>
+                                    <option value="20">20 Random</option>
+                                    <option value="50">50 Random</option>
+                                    <option value="100">100 Random</option>
+                                </select>
+                                <button type="button" id="btn-generate-random" class="btn btn-outline" title="Generate Random Workload Batch">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="23 4 23 10 17 10"></polyline>
+                                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                                    </svg>
+                                    Generate Batch
+                                </button>
+                            </div>
+
+                            <button type="button" id="btn-sample-data" class="btn btn-outline">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                </svg>
+                                Load Sample Preset
+                            </button>
+
+                            <button type="button" id="btn-clear-all" class="btn btn-ghost-danger">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                </svg>
+                                Clear All
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Process Queue Table -->
+                <div class="table-responsive glass-card">
+                    <table class="data-table" id="process-table">
+                        <thead>
+                            <tr>
+                                <th>Process ID</th>
+                                <th>Arrival Time (AT)</th>
+                                <th>Burst Time (BT)</th>
+                                <th>Priority</th>
+                                <th>Remaining BT</th>
+                                <th>State</th>
+                                <th class="text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="process-table-body">
+                            <!-- Dynamically populated via script.js -->
+                        </tbody>
+                    </table>
+                    <div id="process-table-empty" class="empty-state">
+                        <div class="empty-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="9" y1="9" x2="15" y2="15"></line>
+                                <line x1="15" y1="9" x2="9" y2="15"></line>
+                            </svg>
+                        </div>
+                        <p class="empty-title">Ready Queue is Empty</p>
+                        <p class="empty-desc">Add processes using the form above or click "Load Sample Preset".</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 4: SIMULATION PLAYER & CONTROL -->
+            <section id="view-simulation" class="app-view">
+                <div class="view-header">
+                    <h2 class="view-title">Simulation Execution Engine</h2>
+                    <p class="view-desc">Play, pause, step forward, and control simulation execution speed in real time.</p>
+                </div>
+
+                <!-- REAL-TIME SYSTEM MONITOR WIDGET -->
+                <div class="system-monitor-card glass-card mb-4">
+                    <div class="sys-monitor-header">
+                        <div class="sys-monitor-title">
+                            <span class="pulse-dot green"></span>
+                            <h3>Live System Status Monitor</h3>
+                        </div>
+                        <span class="badge-pill-outline" id="sys-status-badge">Engine Ready</span>
+                    </div>
+
+                    <div class="sys-monitor-grid">
+                        <div class="sys-mon-item">
+                            <span class="mon-label">CPU Utilization</span>
+                            <div class="mon-progress-bg">
+                                <div class="mon-progress-fill" id="sys-mon-cpu-fill" style="width: 0%;"></div>
+                            </div>
+                            <span class="mon-value" id="sys-mon-cpu-val">0%</span>
+                        </div>
+
+                        <div class="sys-mon-item">
+                            <span class="mon-label">Memory Usage</span>
+                            <div class="mon-progress-bg">
+                                <div class="mon-progress-fill cyan" id="sys-mon-mem-fill" style="width: 15%;"></div>
+                            </div>
+                            <span class="mon-value" id="sys-mon-mem-val">15 MB</span>
+                        </div>
+
+                        <div class="sys-mon-item">
+                            <span class="mon-label">Ready Queue</span>
+                            <span class="mon-value-lg" id="sys-mon-ready-val">0 Jobs</span>
+                        </div>
+
+                        <div class="sys-mon-item">
+                            <span class="mon-label">Running Process</span>
+                            <span class="mon-value-lg pid-highlight" id="sys-mon-running-val">IDLE</span>
+                        </div>
+
+                        <div class="sys-mon-item">
+                            <span class="mon-label">Completed Jobs</span>
+                            <span class="mon-value-lg" id="sys-mon-completed-val">0</span>
+                        </div>
+
+                        <div class="sys-mon-item">
+                            <span class="mon-label">Simulation Clock</span>
+                            <span class="mon-value-lg code-font" id="sys-mon-clock-val">T = 0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DUAL CPU CORE VISUALIZER & READY QUEUE FLOW -->
+                <div class="dashboard-visualizers-grid mb-4">
+                    <div class="cpu-cores-card glass-card">
+                        <div class="visualizer-header">
+                            <h3>Dual CPU Cores Status</h3>
+                            <span class="badge-tag">Multiprocessor Architecture</span>
+                        </div>
+                        <div class="cpu-cores-row">
+                            <div class="cpu-core-box" id="cpu-core-1">
+                                <div class="core-chip-icon">CPU 1</div>
+                                <div class="core-status-title" id="core-1-status">IDLE</div>
+                                <div class="core-active-pid" id="core-1-pid">None</div>
+                            </div>
+
+                            <div class="cpu-core-box" id="cpu-core-2">
+                                <div class="core-chip-icon">CPU 2</div>
+                                <div class="core-status-title" id="core-2-status">IDLE</div>
+                                <div class="core-active-pid" id="core-2-pid">None</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ready-queue-flow-card glass-card">
+                        <div class="visualizer-header">
+                            <h3>Animated Ready Queue Flow</h3>
+                            <span class="badge-tag">Dispatch Pipeline</span>
+                        </div>
+                        <div class="flow-pipeline-container" id="ready-queue-flow-pipeline">
+                            <div class="flow-step empty">No Jobs in Ready Queue</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="simulation-dashboard glass-card">
+                    <div class="sim-config-summary">
+                        <div class="summary-item">
+                            <span class="summary-label">Selected Algorithm</span>
+                            <span id="sim-selected-algo" class="summary-val">First-Come, First-Served</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Active Workload Size</span>
+                            <span id="sim-process-count" class="summary-val">0 Processes</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Time Quantum</span>
+                            <span id="sim-tq-val" class="summary-val">N/A</span>
+                        </div>
+                    </div>
+
+                    <!-- Step-by-Step Interactive Player Bar -->
+                    <div class="player-controls-bar">
+                        <div class="player-buttons">
+                            <button type="button" id="btn-sim-play" class="btn btn-primary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                                </svg>
+                                Play Simulation
+                            </button>
+
+                            <button type="button" id="btn-sim-pause" class="btn btn-secondary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="6" y="4" width="4" height="16"></rect>
+                                    <rect x="14" y="4" width="4" height="16"></rect>
+                                </svg>
+                                Pause
+                            </button>
+
+                            <button type="button" id="btn-sim-step" class="btn btn-outline">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="5 4 15 12 5 20 5 4"></polygon>
+                                    <line x1="19" y1="5" x2="19" y2="19"></line>
+                                </svg>
+                                Step Forward
+                            </button>
+
+                            <button type="button" id="btn-sim-stop" class="btn btn-ghost-danger">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+                                </svg>
+                                Reset Engine
+                            </button>
+                        </div>
+
+                        <div class="speed-selector-group">
+                            <span class="speed-label">Speed:</span>
+                            <button type="button" class="btn-speed active" data-speed="1.0">1x</button>
+                            <button type="button" class="btn-speed" data-speed="0.5">0.5x</button>
+                            <button type="button" class="btn-speed" data-speed="2.0">2x</button>
+                            <button type="button" class="btn-speed" data-speed="4.0">4x</button>
+                        </div>
+                    </div>
+
+                    <div class="controls-wrapper mt-4">
+                        <button type="button" id="btn-compare" class="btn btn-accent-dark btn-lg">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="20" x2="18" y2="10"></line>
+                                <line x1="12" y1="20" x2="12" y2="4"></line>
+                                <line x1="6" y1="20" x2="6" y2="14"></line>
+                            </svg>
+                            Benchmark All 6 Algorithms
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 5: RESULTS METRICS -->
+            <section id="view-results" class="app-view">
+                <div class="view-header-flex">
+                    <div>
+                        <h2 class="view-title">Simulation Results & Metrics</h2>
+                        <p class="view-desc">Computed scheduling performance metrics per process.</p>
+                    </div>
+
+                    <div class="export-buttons-group">
+                        <button type="button" id="btn-export-csv" class="btn btn-outline">
+                            Export CSV
+                        </button>
+                        <button type="button" id="btn-export-excel" class="btn btn-outline">
+                            Export Excel
+                        </button>
+                        <button type="button" id="btn-export-pdf" class="btn btn-primary">
+                            Print / PDF Report
+                        </button>
+                    </div>
+                </div>
+
+                <!-- KPI Stat Cards Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card glass-card">
+                        <div class="stat-icon icon-blue">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">Avg. Waiting Time</span>
+                            <div class="stat-value-group">
+                                <span class="stat-value" id="stat-avg-wt">0.00</span>
+                                <span class="stat-unit">units</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card glass-card">
+                        <div class="stat-icon icon-indigo">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">Avg. Turnaround Time</span>
+                            <div class="stat-value-group">
+                                <span class="stat-value" id="stat-avg-tat">0.00</span>
+                                <span class="stat-unit">units</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card glass-card">
+                        <div class="stat-icon icon-emerald">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">Avg. Response Time</span>
+                            <div class="stat-value-group">
+                                <span class="stat-value" id="stat-avg-rt">0.00</span>
+                                <span class="stat-unit">units</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card glass-card">
+                        <div class="stat-icon icon-amber">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">CPU Utilization</span>
+                            <div class="stat-value-group">
+                                <span class="stat-value" id="stat-cpu-util">0.0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Data Table -->
+                <div class="table-responsive glass-card">
+                    <table class="data-table" id="results-table">
+                        <thead>
+                            <tr>
+                                <th>Process ID</th>
+                                <th>Arrival Time (AT)</th>
+                                <th>Burst Time (BT)</th>
+                                <th>Priority</th>
+                                <th>Completion Time (CT)</th>
+                                <th>Turnaround Time (TAT)</th>
+                                <th>Waiting Time (WT)</th>
+                                <th>Response Time (RT)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="results-table-body">
+                            <!-- Dynamically populated via script.js -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- VIEW 6: GANTT CHART -->
+            <section id="view-gantt" class="app-view">
+                <div class="view-header-flex">
+                    <div>
+                        <h2 class="view-title">Interactive Gantt Chart Timeline</h2>
+                        <p class="view-desc">Visual timeline of process execution across CPU clock cycles.</p>
+                    </div>
+                    <div class="gantt-badge-container" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <button type="button" id="btn-gantt-zoom-in" class="btn btn-secondary btn-icon" title="Zoom In Timeline">🔍+</button>
+                        <button type="button" id="btn-gantt-zoom-out" class="btn btn-secondary btn-icon" title="Zoom Out Timeline">🔍-</button>
+                        <button type="button" id="btn-gantt-reset-zoom" class="btn btn-secondary" title="Reset Zoom">↺ Reset Zoom</button>
+                        <button type="button" id="btn-gantt-fullscreen" class="btn btn-secondary btn-icon" title="Fullscreen View">⛶</button>
+                        <button type="button" id="btn-gantt-download-png" class="btn btn-outline" title="Download Gantt Image PNG">📷 PNG</button>
+                        <span id="gantt-algo-name" class="badge-pill-outline">First-Come, First-Served</span>
+                    </div>
+                </div>
+
+                <div class="gantt-wrapper glass-card">
+                    <div id="gantt-bar-container" class="gantt-bar-row">
+                        <!-- Dynamically populated via script.js -->
+                    </div>
+                    <div id="gantt-timeline-container" class="gantt-timeline-row">
+                        <!-- Dynamically populated via script.js -->
+                    </div>
+                </div>
+
+                <div class="gantt-legend-wrapper glass-card">
+                    <span class="legend-title">Process Legend:</span>
+                    <div id="gantt-legend" class="gantt-legend">
+                        <!-- Dynamically populated via script.js -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 7: PERFORMANCE ANALYTICS -->
+            <section id="view-analytics" class="app-view">
+                <div class="view-header">
+                    <h2 class="view-title">Performance Analytics Dashboard</h2>
+                    <p class="view-desc">Visual evaluation charts powered by Chart.js for deep scheduling diagnostics.</p>
+                </div>
+
+                <div class="analytics-charts-grid">
+                    <div class="chart-card glass-card">
+                        <h3>CPU Utilization vs Idle Time</h3>
+                        <div class="chart-container">
+                            <canvas id="chart-cpu-utilization"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card glass-card">
+                        <h3>Waiting & Turnaround Time per Process</h3>
+                        <div class="chart-container">
+                            <canvas id="chart-wt-tat"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card glass-card">
+                        <h3>Algorithm Throughput Breakdown</h3>
+                        <div class="chart-container">
+                            <canvas id="chart-throughput"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card glass-card">
+                        <h3>Metrics Benchmark Comparison</h3>
+                        <div class="chart-container">
+                            <canvas id="chart-metrics-comparison"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 8: COMPARISON MATRIX -->
+            <section id="view-comparison" class="app-view">
+                <div class="view-header">
+                    <h2 class="view-title">Algorithm Benchmark Matrix</h2>
+                    <p class="view-desc">Side-by-side performance evaluation across all 6 CPU scheduling algorithms for the current dataset.</p>
+                </div>
+
+                <!-- Comparison Cards Grid for All 6 Algorithms -->
+                <div id="comparison-cards-grid" class="comparison-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                    <!-- Dynamically populated via script.js -->
+                </div>
+
+                <!-- Animated Comparison Progress Bars -->
+                <div class="glass-card mb-4" style="padding: 24px; margin-bottom: 24px;">
+                    <h3 style="color: var(--primary); margin-bottom: 16px; font-size: 1.05rem;">Algorithm Efficiency Comparison (Avg Waiting Time)</h3>
+                    <div id="comparison-bars-container" style="display: flex; flex-direction: column; gap: 14px;">
+                        <!-- Dynamically populated via script.js -->
+                    </div>
+                </div>
+
+                <!-- Comparison Table -->
+                <div class="table-responsive glass-card">
+                    <table class="data-table comparison-table" id="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Algorithm</th>
+                                <th>Type</th>
+                                <th>Avg Waiting Time</th>
+                                <th>Avg Turnaround Time</th>
+                                <th>Avg Response Time</th>
+                                <th>Throughput</th>
+                                <th>CPU Util %</th>
+                                <th>Context Switches</th>
+                                <th>Execution Order</th>
+                                <th>Benchmark Rating</th>
+                            </tr>
+                        </thead>
+                        <tbody id="comparison-table-body">
+                            <!-- Dynamically populated via script.js -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- VIEW 9: VIVA & PSEUDOCODE GUIDE -->
+            <section id="view-about" class="app-view">
+                <div class="view-header">
+                    <h2 class="view-title">Viva & Operating System Theory Reference Guide</h2>
+                    <p class="view-desc">Comprehensive theoretical reference, formulas, complexities, and top viva examination questions.</p>
+                </div>
+
+                <div class="about-grid">
+                    <div class="about-card glass-card">
+                        <div class="section-title-with-icon" style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
+                                <line x1="4" y1="9" x2="20" y2="9"></line>
+                                <line x1="4" y1="15" x2="20" y2="15"></line>
+                                <line x1="10" y1="3" x2="8" y2="21"></line>
+                                <line x1="16" y1="3" x2="14" y2="21"></line>
+                            </svg>
+                            <h3 style="margin: 0; color: var(--primary);">Operating System Metrics Formulas</h3>
+                        </div>
+                        <div class="formula-list">
+                            <div class="formula-item">
+                                <span class="formula-name">Turnaround Time (TAT)</span>
+                                <code>TAT = Completion Time (CT) − Arrival Time (AT)</code>
+                            </div>
+                            <div class="formula-item">
+                                <span class="formula-name">Waiting Time (WT)</span>
+                                <code>WT = Turnaround Time (TAT) − Burst Time (BT)</code>
+                            </div>
+                            <div class="formula-item">
+                                <span class="formula-name">Response Time (RT)</span>
+                                <code>RT = Time of First Execution − Arrival Time (AT)</code>
+                            </div>
+                            <div class="formula-item">
+                                <span class="formula-name">CPU Utilization %</span>
+                                <code>Utilization = (Total Busy CPU Time / Total Execution Time) × 100</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="about-card glass-card">
+                        <div class="section-title-with-icon" style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
+                                <rect x="4" y="4" width="16" height="16" rx="3" ry="3"></rect>
+                                <rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor" fill-opacity="0.3"></rect>
+                                <line x1="8" y1="1" x2="8" y2="4"></line>
+                                <line x1="12" y1="1" x2="12" y2="4"></line>
+                                <line x1="16" y1="1" x2="16" y2="4"></line>
+                                <line x1="8" y1="20" x2="8" y2="23"></line>
+                                <line x1="12" y1="20" x2="12" y2="23"></line>
+                                <line x1="16" y1="20" x2="16" y2="23"></line>
+                                <line x1="1" y1="8" x2="4" y2="8"></line>
+                                <line x1="1" y1="12" x2="4" y2="12"></line>
+                                <line x1="1" y1="16" x2="4" y2="16"></line>
+                                <line x1="20" y1="8" x2="23" y2="8"></line>
+                                <line x1="20" y1="12" x2="23" y2="12"></line>
+                                <line x1="20" y1="16" x2="23" y2="16"></line>
+                            </svg>
+                            <h3 style="margin: 0; color: var(--primary);">Scheduling Policy Characteristics</h3>
+                        </div>
+                        <ul class="about-summary-list">
+                            <li><strong>FCFS</strong>: Non-preemptive, simple FIFO queue dispatching, subject to Convoy Effect.</li>
+                            <li><strong>SJF</strong>: Non-preemptive, picks smallest burst time available, provably optimal for minimum average waiting time.</li>
+                            <li><strong>SRTF</strong>: Preemptive SJF, preempts running process if a newly arrived process has shorter remaining time.</li>
+                            <li><strong>Priority NP</strong>: Non-preemptive, lower numerical value = higher priority rank.</li>
+                            <li><strong>Priority Preemptive</strong>: Preemptive, immediately preempts CPU if higher priority process arrives.</li>
+                            <li><strong>Round Robin</strong>: Preemptive, uses fixed Time Quantum slice to guarantee quick response time.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Top 15 Viva & Interview Q&A Section -->
+                <div class="viva-qa-section glass-card mt-4">
+                    <div class="section-title-with-icon" style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                        <h3 style="margin: 0; color: var(--text-primary);">Top 15 Operating Systems Viva & Interview Questions</h3>
+                    </div>
+
+                    <div class="qa-list">
+                        <details class="qa-item">
+                            <summary>1. What is CPU Scheduling and why is it necessary?</summary>
+                            <p>CPU scheduling is the process by which the OS allocates CPU core execution time to ready processes. It maximizes CPU utilization, throughput, and guarantees fairness and responsiveness in multi-tasking systems.</p>
+                        </details>
+
+                        <details class="qa-item">
+                            <summary>2. What is the difference between Preemptive and Non-Preemptive scheduling?</summary>
+                            <p>In non-preemptive scheduling, once a process is allocated the CPU, it holds it until completion or I/O block. In preemptive scheduling, the OS can forcibly suspend a running process to allocate CPU to a higher priority or newly arrived process.</p>
+                        </details>
+
+                        <details class="qa-item">
+                            <summary>3. What is the Convoy Effect in FCFS?</summary>
+                            <p>The Convoy Effect occurs when short processes are delayed behind a very long CPU-bound process in a non-preemptive FCFS queue, causing high average waiting time.</p>
+                        </details>
+
+                        <details class="qa-item">
+                            <summary>4. Why is Shortest Job First (SJF) provably optimal?</summary>
+                            <p>SJF minimizes the total sum of waiting times by moving smaller bursts to the front of the queue, minimizing waiting delay for subsequent processes.</p>
+                        </details>
+
+                        <details class="qa-item">
+                            <summary>5. What is Starvation and how can Aging resolve it?</summary>
+                            <p>Starvation occurs when low priority processes are indefinitely postponed by a continuous stream of higher priority processes. Aging gradually increases the priority of long-waiting processes over time.</p>
+                        </details>
+
+                        <details class="qa-item">
+                            <summary>6. How does Time Quantum selection affect Round Robin performance?</summary>
+                            <p>If TQ is extremely large, RR degrades into FCFS. If TQ is extremely small, context switching overhead dominates CPU execution efficiency.</p>
+                        </details>
+
+                        <details class="qa-item">
+                            <summary>7. What is Context Switching and what is its overhead?</summary>
+                            <p>Context switching saves the execution state (registers, program counter) of a running process and restores another. Its overhead consists of CPU time spent solely on kernel state transitions without doing useful process work.</p>
+                        </details>
+
+                        <details class="qa-item">
+                            <summary>8. What is the difference between Turnaround Time (TAT) and Waiting Time (WT)?</summary>
+                            <p>Turnaround Time is the total elapsed time from arrival to completion (TAT = CT - AT). Waiting Time is the total duration a process spends waiting in the ready queue for CPU allocation (WT = TAT - BT).</p>
+                        </details>
+
+                        <details class="qa-item">
+                            <summary>9. What is Response Time (RT) and why is it crucial for interactive systems?</summary>
+                            <p>Response Time is the delay between process arrival and its very first CPU execution (RT = First Start Time - AT). Low response time ensures rapid feedback in interactive time-sharing environments.</p>
+                        </details>
+
+                        <details class="qa-item">
+                            <summary>10. How is CPU Utilization calculated and what does it measure?</summary>
+                            <p>CPU Utilization is the percentage of total time the CPU core spends executing non-idle process workload (CPU Util = [Busy Time / Total Time] * 100). Higher utilization reflects optimal hardware usage.</p>
+                        </details>
+
+                        <details class="qa-item">
+                            <summary>11. What is Throughput in CPU scheduling?</summary>
+                            <p>Throughput is the number of processes completed by the CPU per unit of time (Throughput = Completed Jobs / Total Time). Maximizing throughput increases system processing capacity.</p>
+                        </details>
+
+                        <details class="qa-item">
+                            <summary>12. What is Shortest Remaining Time First (SRTF)?</summary>
+                            <p>SRTF is the preemptive version of SJF. If a newly arrived process has a shorter remaining burst time than the currently executing process, the CPU is preempted immediately for the new process.</p>
+                        </details>
+
+                        <details class="qa-item">
+                            <summary>13. What is Priority Scheduling and how does Preemptive Priority differ from Non-Preemptive Priority?</summary>
+                            <p>Priority scheduling assigns numerical priority ranks to processes. In non-preemptive priority, running jobs finish undisturbed. In preemptive priority, an arriving higher-priority job immediately preempts the current process.</p>
+                        </details>
+
+                        <details class="qa-item">
+                            <summary>14. What is the Dispatcher and how does Dispatch Latency affect system performance?</summary>
+                            <p>The Dispatcher is the kernel module that transfers control of the CPU to the process chosen by the scheduler. Dispatch Latency is the time delay spent stopping one process and starting another.</p>
+                        </details>
+
+                        <details class="qa-item">
+                            <summary>15. What is Multilevel Queue (MLQ) and Multilevel Feedback Queue (MLFQ) scheduling?</summary>
+                            <p>MLQ partitions the ready queue into separate sub-queues with fixed priorities. MLFQ allows processes to move between queues based on CPU burst behavior, dynamic priority aging, and I/O feedback.</p>
+                        </details>
+                    </div>
+                </div>
+
+                <!-- Keyboard Shortcuts Reference Table -->
+                <div class="shortcuts-section glass-card mt-4">
+                    <div class="section-title-with-icon" style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
+                            <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
+                            <line x1="6" y1="8" x2="6.01" y2="8"></line>
+                            <line x1="10" y1="8" x2="10.01" y2="8"></line>
+                            <line x1="14" y1="8" x2="14.01" y2="8"></line>
+                            <line x1="18" y1="8" x2="18.01" y2="8"></line>
+                            <line x1="6" y1="12" x2="6.01" y2="12"></line>
+                            <line x1="10" y1="12" x2="10.01" y2="12"></line>
+                            <line x1="14" y1="12" x2="14.01" y2="12"></line>
+                            <line x1="18" y1="12" x2="18.01" y2="12"></line>
+                            <line x1="7" y1="16" x2="17" y2="16"></line>
+                        </svg>
+                        <h3 style="margin: 0; color: var(--text-primary);">Desktop Keyboard Shortcuts Reference</h3>
+                    </div>
+                    <p class="section-subtitle" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; margin-bottom: 18px;">
+                        Quick keyboard shortcuts for controlling simulations, benchmarking algorithms, managing processes, and improving productivity during demonstrations.
+                    </p>
+                    <div class="shortcuts-grid">
+                        <div class="shortcut-card glass-card-sub">
+                            <span>Play / Pause Simulation</span>
+                            <kbd class="key-badge">Space</kbd>
+                        </div>
+                        <div class="shortcut-card glass-card-sub">
+                            <span>Reset Simulation Clock</span>
+                            <kbd class="key-badge">R</kbd>
+                        </div>
+                        <div class="shortcut-card glass-card-sub">
+                            <span>Focus New Process Form</span>
+                            <kbd class="key-badge">N</kbd>
+                        </div>
+                        <div class="shortcut-card glass-card-sub">
+                            <span>Delete Selected Process</span>
+                            <kbd class="key-badge">Delete</kbd>
+                        </div>
+                        <div class="shortcut-card glass-card-sub">
+                            <span>Export Workload Data</span>
+                            <kbd class="key-badge">Ctrl + E</kbd>
+                        </div>
+                        <div class="shortcut-card glass-card-sub">
+                            <span>Benchmark All Algorithms</span>
+                            <kbd class="key-badge">Ctrl + B</kbd>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Script File -->
+    <script src="script.js"></script>
+</body>
+</html>
